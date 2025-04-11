@@ -14,11 +14,17 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <TextBlock FontSize="12"  Margin="0 10 10 0" >Версия программы:</TextBlock>
-            <TextBlock x:Name="ProgVersion" FontSize="12"  Margin="0 30 0 0" ></TextBlock>
+            <TextBlock x:Name="ProgVersion" 
+                       FontSize="12"  
+                       Margin="0 30 0 0" ></TextBlock>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <TextBlock FontSize="12"  Margin="0 10 10 0" >Описание</TextBlock>
-            <TextBox x:Name="ProgDescription" FontSize="12"  Margin="0 10 0 0"></TextBox>
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Left">
+            <TextBlock FontSize="12"  
+                       Margin="0 10 10 0" >Описание</TextBlock>
+            <TextBox x:Name="ProgDescription" 
+                     FontSize="12"  
+                     Margin="0 10 0 0"></TextBox>
         </StackPanel>
     </StackPanel>
 </Window>
