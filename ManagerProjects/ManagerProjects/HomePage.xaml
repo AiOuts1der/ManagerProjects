@@ -1,0 +1,104 @@
+﻿<Page x:Class="ManagerProjects.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ManagerProjects"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="400"
+      Title="HomePage">
+
+    <StackPanel Background="White">
+        <ListBox x:Name="listBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Separator></Separator>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Название: "
+                                       Width="250" 
+                                       TextAlignment="Right"/>
+                            <TextBlock Text="{Binding Title}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Дата начала разработки: " 
+                                       Width="250" 
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding StartDevelopementDate, 
+                            StringFormat='{}{0:dd.MM.yyyy}'}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Дата внедрения: " 
+                                       Width="250" 
+                                       TextAlignment="Right"/>
+                            <TextBlock Text="{Binding StartProductionDate, 
+                            StringFormat='{}{0:dd.MM.yyyy}'}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Текущая версия проекта: "
+                                       Width="250" 
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding CurrentVersion}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Статус разработки: "
+                                       Width="250" 
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding Status}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ссылка на директорию с релизами: " 
+                                       Width="250" 
+                                       TextAlignment="Right"/>
+                            <TextBlock Text="{Binding ReleasesUrl}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ссылка на проект на Git сервер: "
+                                       Width="250" 
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding GitUrl}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="ФИО ответственного разработчика: "
+                                       Width="250" 
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding ResponsibleDeveloper.Name}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Подразделения использующие проект: "
+                                       Width="250" 
+                                       TextAlignment="Right" />
+                            <ItemsControl ItemsSource="{Binding Departments}" >
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Title}"
+                                               Margin="0 0 8 0"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Количество людей использующих проект: " 
+                                       Width="250" 
+                                       TextAlignment="Right"/>
+                            <TextBlock Text="{Binding AmountWorkplaces}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Произвольный комментарий: " 
+                                       Width="250" 
+                                       TextAlignment="Right"/>
+                            <TextBlock Text="{Binding Comment}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</Page>
