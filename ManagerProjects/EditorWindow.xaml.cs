@@ -34,7 +34,7 @@ namespace ManagerProjects
             // Инициализация проекта (нового или переданного)
             _currentProject = project ?? new Project
             {
-                StartDevelopementDate = DateTime.Now,
+                StartDevelopmentDate = DateTime.Now,
                 StartProductionDate = DateTime.Now
             };
             // Инициализация связанных объектов, если они null
@@ -89,8 +89,8 @@ namespace ManagerProjects
         {
             // Заполнение полей формы данными из проекта
             txtTitle.Text = _currentProject.Title;
-            if (_currentProject.StartDevelopementDate > DateTime.MinValue)
-                dpStartDev.SelectedDate = _currentProject.StartDevelopementDate;
+            if (_currentProject.StartDevelopmentDate > DateTime.MinValue)
+                dpStartDev.SelectedDate = _currentProject.StartDevelopmentDate;
 
             if (_currentProject.StartProductionDate > DateTime.MinValue)
                 dpStartProd.SelectedDate = _currentProject.StartProductionDate;
@@ -119,7 +119,7 @@ namespace ManagerProjects
             {
                 // Сохранение данных из формы в объект проекта
                 _currentProject.Title = txtTitle.Text;
-                _currentProject.StartDevelopementDate = dpStartDev.SelectedDate ?? DateTime.Now;
+                _currentProject.StartDevelopmentDate = dpStartDev.SelectedDate ?? DateTime.Now;
                 _currentProject.StartProductionDate = dpStartProd.SelectedDate ?? DateTime.Now;
                 _currentProject.CurrentVersion = txtVersion.Text;
                 _currentProject.Status = (Status)cbStatus.SelectedIndex;

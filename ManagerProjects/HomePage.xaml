@@ -1,54 +1,54 @@
 ﻿<Page x:Class="ManagerProjects.HomePage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ManagerProjects"
-      mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="1000"
-      Title="HomePage">
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:local="clr-namespace:ManagerProjects"
+          mc:Ignorable="d" 
+          d:DesignHeight="600" d:DesignWidth="1000"
+          Title="HomePage">
     <Grid Background="White">
         <DataGrid Name="projectGrid" 
-                  CanUserAddRows="False" 
-                  AutoGenerateColumns="False"  
-                  HorizontalGridLinesBrush="DarkGray" 
-                  RowBackground="LightGray" 
-                  AlternatingRowBackground="White"
-                  Margin="10"
-                  HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto"
-                  ColumnWidth="*">
+                      CanUserAddRows="False" 
+                      AutoGenerateColumns="False"  
+                      HorizontalGridLinesBrush="DarkGray" 
+                      RowBackground="LightGray" 
+                      AlternatingRowBackground="White"
+                      Margin="10"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto"
+                      ColumnWidth="*">
             <DataGrid.Columns>
                 <!-- Название -->
                 <DataGridTextColumn Header="Название" 
-                                   Binding="{Binding Title}"
-                                   Width="120"/>
+                                       Binding="{Binding Title}"
+                                       Width="120"/>
 
                 <!-- Даты -->
                 <DataGridTextColumn Header="Дата разработки" 
-                                   Binding="{Binding StartDevelopementDate, StringFormat=\{0:dd.MM.yy\}}"
-                                   Width="110"/>
+                                       Binding="{Binding StartDevelopementDate, StringFormat=\{0:dd.MM.yy\}}"
+                                       Width="110"/>
 
                 <DataGridTextColumn Header="Дата внедрения"  
-                                   Binding="{Binding StartProductionDate, StringFormat=\{0:dd.MM.yy\}}"
-                                   Width="100"/>
+                                       Binding="{Binding StartProductionDate, StringFormat=\{0:dd.MM.yy\}}"
+                                       Width="100"/>
 
                 <!-- Версия и статус -->
                 <DataGridTextColumn Header="Версия" 
-                                   Binding="{Binding CurrentVersion}"
-                                   Width="70"/>
+                                       Binding="{Binding CurrentVersion}"
+                                       Width="70"/>
 
                 <DataGridTextColumn Header="Статус"   
-                                   Binding="{Binding Status}"
-                                   Width="100"/>
+                                       Binding="{Binding Status}"
+                                       Width="100"/>
 
                 <!-- Ссылки -->
                 <DataGridTemplateColumn Header="Релизы" Width="95">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock TextWrapping="Wrap">
-                                <Hyperlink RequestNavigate="HyperlinkDir_RequestNavigate"
-                                           NavigateUri="{Binding ReleasesUrl}">Открыть</Hyperlink>
+                                    <Hyperlink RequestNavigate="HyperlinkDir_RequestNavigate"
+                                               NavigateUri="{Binding ReleasesUrl}">Открыть</Hyperlink>
                             </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -58,8 +58,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock TextWrapping="Wrap">
-                                <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" 
-                                           NavigateUri="{Binding GitUrl}">Ссылка</Hyperlink>
+                                    <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" 
+                                               NavigateUri="{Binding GitUrl}">Ссылка</Hyperlink>
                             </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -67,35 +67,35 @@
 
                 <!-- Ответственный -->
                 <DataGridTextColumn Header="Ответственный разработчик"   
-                                   Binding="{Binding ResponsibleDeveloper.Name}"
-                                   Width="180"/>
+                                       Binding="{Binding ResponsibleDeveloper.Name}"
+                                       Width="180"/>
 
                 <!-- Подразделения -->
                 <DataGridTemplateColumn Header="Подразделения исп. проект" Width="180">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock TextWrapping="Wrap">
-                                <ItemsControl ItemsSource="{Binding Departments}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Vertical"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Title}" Margin="0,0,5,0"/>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding Departments}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Vertical"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Title}" Margin="0,0,5,0"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <!-- Дополнительная информация -->
                 <DataGridTextColumn Header="Раб. мест"  
-                                   Binding="{Binding AmountWorkplaces}"
-                                   Width="70"/>
+                                       Binding="{Binding AmountWorkplaces}"
+                                       Width="70"/>
 
                 <DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*">
                     <DataGridTextColumn.ElementStyle>

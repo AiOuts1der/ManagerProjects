@@ -15,7 +15,7 @@ namespace ManagerProjects.Classes
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public DateTime StartDevelopementDate { get; set; }
+        public DateTime StartDevelopmentDate { get; set; }
         public DateTime StartProductionDate { get; set; }
         public string CurrentVersion { get; set; }
         public Status Status { get; set; }

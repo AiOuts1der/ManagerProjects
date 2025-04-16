@@ -90,7 +90,7 @@ namespace ManagerProjects
 
                 // Заполнение данных проекта из формы
                 _newProject.Title = txtTitle.Text;
-                _newProject.StartDevelopementDate = dpStartDev.SelectedDate.Value;
+                _newProject.StartDevelopmentDate = dpStartDev.SelectedDate.Value;
                 _newProject.StartProductionDate = (DateTime)dpStartProd.SelectedDate;
                 _newProject.CurrentVersion = txtVersion.Text;
                 _newProject.Status = cbStatus.SelectedIndex != -1 ? (Status)cbStatus.SelectedIndex : Status.InDevelopment;
