@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ManagerProjects.Classes;
 
 namespace ManagerProjects
@@ -117,6 +108,33 @@ namespace ManagerProjects
         {
             try
             {
+                // Валидация обязательных полей
+                if (string.IsNullOrWhiteSpace(txtTitle.Text))
+                {
+                    MessageBox.Show("Введите название проекта", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Проверка ФИО разработчика
+                if (string.IsNullOrWhiteSpace(txtLastName.Text) ||
+                    string.IsNullOrWhiteSpace(txtFirstName.Text) ||
+                    string.IsNullOrWhiteSpace(txtPatronymic.Text))
+                {
+                    MessageBox.Show("Введите полное ФИО ответственного разработчика", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Проверка выбранных подразделений
+                var selectedDepartments = lbDepartments.ItemsSource
+                    .Cast<DepartmentViewModel>()
+                    .Where(d => d.IsSelected)
+                    .ToList();
+
+                if (selectedDepartments.Count == 0)
+                {
+                    MessageBox.Show("Выберите хотя бы одно подразделение", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 // Сохранение данных из формы в объект проекта
                 _currentProject.Title = txtTitle.Text;
                 _currentProject.StartDevelopmentDate = dpStartDev.SelectedDate ?? DateTime.Now;
@@ -139,35 +157,51 @@ namespace ManagerProjects
                 _currentProject.ResponsibleDeveloper.FirstName = txtFirstName.Text;
                 _currentProject.ResponsibleDeveloper.Patronymic = txtPatronymic.Text;
 
-                // Сохранение выбранных подразделений
-                var selectedDepartments = lbDepartments.ItemsSource
-                    .Cast<DepartmentViewModel>()
-                    .Where(d => d.IsSelected)
-                    .Select(d => _allDepartments.First(ad => ad.Id == d.Id))
-                    .ToList();
-
-                _currentProject.Departments = selectedDepartments;
-
                 // Работа с БД
                 using (ProjectsContext db = new ProjectsContext())
                 {
-                    if (_currentProject.Id == 0) // Новый проект
+                    if (db.Projects.Any(p => p.Id != _currentProject.Id && p.Title == txtTitle.Text))
                     {
+                        MessageBox.Show("Проект с таким названием уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Проверка на уникальность разработчика
+                    var existingDeveloper = db.Developers.FirstOrDefault(d =>
+                d.LastName == txtLastName.Text &&
+                d.FirstName == txtFirstName.Text &&
+                d.Patronymic == txtPatronymic.Text);
+
+                    if (existingDeveloper != null)
+                    {
+                        // Используем существующего разработчика
+                        _currentProject.ResponsibleDeveloper = existingDeveloper;
+                    }
+                    else
+                    {
+                        // Создаем нового разработчика
+                        _currentProject.ResponsibleDeveloper = new Developer
+                        {
+                            LastName = txtLastName.Text,
+                            FirstName = txtFirstName.Text,
+                            Patronymic = txtPatronymic.Text
+                        };
                         db.Developers.Add(_currentProject.ResponsibleDeveloper);
+                    }
+
+                    if (_currentProject.Id == 0)
+                    {
                         db.Projects.Add(_currentProject);
                     }
-                    else // Редактирование существующего
+                    else
                     {
-                        var existingProject = db.Projects.Include("ResponsibleDeveloper").Include("Departments")
-                            .FirstOrDefault(p => p.Id == _currentProject.Id);
+                        var existingProject = (from p in db.Projects.Include("Departments")
+                                               where p.Id == _currentProject.Id
+                                               select p).FirstOrDefault();
 
                         if (existingProject != null)
                         {
-                            // Обновление данных проекта
                             db.Entry(existingProject).CurrentValues.SetValues(_currentProject);
-                            // Обновление разработчика
-                            db.Entry(existingProject.ResponsibleDeveloper).CurrentValues.SetValues(_currentProject.ResponsibleDeveloper);
-                            // Обновление подразделений
                             existingProject.Departments.Clear();
                             foreach (var department in _currentProject.Departments)
                             {
@@ -179,10 +213,8 @@ namespace ManagerProjects
                             }
                         }
                     }
-
                     db.SaveChanges();
                 }
-
                 MessageBox.Show("Данные успешно сохранены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.DialogResult = true;
                 this.Close();

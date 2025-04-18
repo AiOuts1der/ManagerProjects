@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ManagerProjects.Classes;
 
 namespace ManagerProjects
@@ -81,10 +72,23 @@ namespace ManagerProjects
                     MessageBox.Show("Введите название проекта", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
-                if (dpStartDev.SelectedDate == null)
+                // Проверка ФИО разработчика
+                if (string.IsNullOrWhiteSpace(txtLastName.Text) ||
+                    string.IsNullOrWhiteSpace(txtFirstName.Text) ||
+                    string.IsNullOrWhiteSpace(txtPatronymic.Text))
                 {
-                    MessageBox.Show("Укажите дату начала разработки", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Введите полное ФИО ответственного разработчика", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                // Проверка выбранных подразделений
+                var selectedDepartments = lbDepartments.ItemsSource
+                    .Cast<DepartmentViewModel>()
+                    .Where(d => d.IsSelected)
+                    .ToList();
+
+                if (selectedDepartments.Count == 0)
+                {
+                    MessageBox.Show("Выберите хотя бы одно подразделение", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -114,19 +118,39 @@ namespace ManagerProjects
                 _newProject.ResponsibleDeveloper.FirstName = txtFirstName.Text;
                 _newProject.ResponsibleDeveloper.Patronymic = txtPatronymic.Text;
 
-                // Получение выбранных подразделений
-                var selectedDepartments = lbDepartments.ItemsSource
-                    .Cast<DepartmentViewModel>()
-                    .Where(d => d.IsSelected)
-                    .Select(d => _allDepartments.First(ad => ad.Id == d.Id))
-                    .ToList();
 
-                _newProject.Departments = selectedDepartments;
 
                 // Сохранение в БД
                 using (ProjectsContext db = new ProjectsContext())
                 {
-                    db.Developers.Add(_newProject.ResponsibleDeveloper);
+                    if (db.Projects.Any(p => p.Id != _newProject.Id && p.Title == txtTitle.Text))
+                    {
+                        MessageBox.Show("Проект с таким названием уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                    // Проверяем, существует ли такой разработчик в БД
+                    var existingDeveloper = db.Developers.FirstOrDefault(d =>
+                        d.LastName == txtLastName.Text &&
+                        d.FirstName == txtFirstName.Text &&
+                        d.Patronymic == txtPatronymic.Text);
+
+                    if (existingDeveloper != null)
+                    {
+                        // Используем существующего разработчика
+                        _newProject.ResponsibleDeveloper = existingDeveloper;
+                    }
+                    else
+                    {
+                        // Создаем нового разработчика
+                        _newProject.ResponsibleDeveloper = new Developer
+                        {
+                            LastName = txtLastName.Text,
+                            FirstName = txtFirstName.Text,
+                            Patronymic = txtPatronymic.Text
+                        };
+                        db.Developers.Add(_newProject.ResponsibleDeveloper);
+                    }
+
                     db.Projects.Add(_newProject);
                     db.SaveChanges();
                 }

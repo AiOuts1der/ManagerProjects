@@ -29,13 +29,11 @@ namespace ManagerProjects
             // Начальная загрузка домашней страницы
             MainFrame.Navigate(new HomePage());
         }
-
         // Обработчик перехода на домашнюю страницу
         private void Home_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new HomePage());
         }
-
         // Обработчик создания проекта
         private void CreateProject_Click(object sender, RoutedEventArgs e)
         {
@@ -47,7 +45,6 @@ namespace ManagerProjects
                 homePage.projectGrid.ItemsSource = homePage.LoadFromDB();
             }
         }
-
         // Обработчик редактирования проекта
         private void Editor_Click(object sender, RoutedEventArgs e)
         {
@@ -70,14 +67,11 @@ namespace ManagerProjects
                               MessageBoxImage.Warning);
             }
         }
-
         // Обработчик удаления проекта
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            // Проверка, что выбран проект для удаления
             if (MainFrame.Content is HomePage homePage && homePage.projectGrid.SelectedItem is Project selectedProject)
             {
-                // Подтверждение удаления
                 var result = MessageBox.Show($"Вы действительно хотите удалить проект '{selectedProject.Title}'?",
                                            "Подтверждение удаления",
                                            MessageBoxButton.YesNo,
@@ -90,14 +84,15 @@ namespace ManagerProjects
                         using (ProjectsContext db = new ProjectsContext())
                         {
                             // Загрузка проекта со связанными данными
-                            var projectToDelete = db.Projects
-                                .Include("ResponsibleDeveloper")
-                                .Include("Departments")
-                                .FirstOrDefault(p => p.Id == selectedProject.Id);
-
+                            var projectToDelete = (from p in db.Projects.Include("Departments")
+                                                   where p.Id == selectedProject.Id
+                                                   select p).FirstOrDefault();
                             if (projectToDelete != null)
                             {
-                                // Удаление проекта
+                                // Очищаем связь с подразделениями
+                                projectToDelete.Departments.Clear();
+
+                                // Удаляем проект (разработчик останется в БД)
                                 db.Projects.Remove(projectToDelete);
                                 db.SaveChanges();
 

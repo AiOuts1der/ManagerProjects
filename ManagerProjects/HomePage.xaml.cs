@@ -14,7 +14,6 @@ namespace ManagerProjects
         public HomePage()
         {
             InitializeComponent();
-            InitializeDatabase(); // Создаём структуру БД
             projectGrid.ItemsSource = LoadFromDB();
         }
 
@@ -28,19 +27,6 @@ namespace ManagerProjects
                     .ToList();
             }
         }
-
-        private void InitializeDatabase()
-        {
-            using (ProjectsContext db = new ProjectsContext())
-            {
-                // Проверяем, существует ли база, и создаём её при необходимости
-                if (!db.Database.Exists())
-                {
-                    db.Database.Create();
-                }
-            }
-        }
-
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -55,5 +41,6 @@ namespace ManagerProjects
             Process.Start("explorer.exe", targetDirectory);
             e.Handled = true;
         }
+
     }
-}
+}   

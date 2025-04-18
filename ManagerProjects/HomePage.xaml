@@ -26,7 +26,7 @@
 
                 <!-- Даты -->
                 <DataGridTextColumn Header="Дата разработки" 
-                                       Binding="{Binding StartDevelopementDate, StringFormat=\{0:dd.MM.yy\}}"
+                                       Binding="{Binding StartDevelopmentDate, StringFormat=\{0:dd.MM.yy\}}"
                                        Width="110"/>
 
                 <DataGridTextColumn Header="Дата внедрения"  
